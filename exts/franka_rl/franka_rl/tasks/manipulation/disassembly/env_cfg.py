@@ -58,8 +58,8 @@ WRIST_CAM_ROT = (-0.6455, -0.6738, 0.2681, 0.2397)
 # along the Panda finger's local +Z fingertip direction. They also roll Tip30 so the slide
 # faces, not the undersides, point inward toward the opposing finger.
 TIP30_FINGER_POS = (0.0, 0.0, 0.046)
-TIP30_LEFT_FINGER_ROT = (1.0, 0.0, 0.0, 0.0)
-TIP30_RIGHT_FINGER_ROT = (0.0, 0.0, 0.0, 1.0)
+TIP30_LEFT_FINGER_ROT = (-0.5, -0.5, -0.5, 0.5)
+TIP30_RIGHT_FINGER_ROT = (-0.5, 0.5, -0.5, -0.5)
 TIP30_SCALE = (0.01, 0.01, 0.01)
 
 
