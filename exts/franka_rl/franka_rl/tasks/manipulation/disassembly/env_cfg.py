@@ -72,12 +72,12 @@ class DisassemblySceneCfg(InteractiveSceneCfg):
         spawn=sim_utils.GroundPlaneCfg(),
     )
 
-    # brown box acting as a table
+    # brown box acting as a table — pos is at center, so Z=0.2 puts bottom on ground
     table = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/Table",
-        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.0]),
+        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.2]),
         spawn=sim_utils.CuboidCfg(
-            size=(0.6, 0.6, 0.4),
+            size=(0.8, 0.8, 0.4),
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.4, 0.3, 0.2)),
             physics_material=RigidBodyMaterialCfg(static_friction=1.0, dynamic_friction=1.0),
             collision_props=sim_utils.CollisionPropertiesCfg(),
@@ -87,13 +87,13 @@ class DisassemblySceneCfg(InteractiveSceneCfg):
     # the Franka Panda robot arm — mounted on top of the table
     robot = FRANKA_PANDA_HIGH_PD_CFG.replace(
         prim_path="{ENV_REGEX_NS}/Robot",
-        init_state=FRANKA_PANDA_HIGH_PD_CFG.init_state.replace(pos=[0.0, 0.0, 0.2]),
+        init_state=FRANKA_PANDA_HIGH_PD_CFG.init_state.replace(pos=[0.0, 0.0, 0.4]),
     )
 
     # outer shell + mouthpiece — static, bolted to the world, never moves
     fixture = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/Fixture",
-        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.25]),
+        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.45]),
         spawn=UsdFileCfg(
             usd_path=os.path.join(ASSETS_DIR, "fixture.usd"),
             collision_props=sim_utils.CollisionPropertiesCfg(),
@@ -143,7 +143,7 @@ class DisassemblySceneCfg(InteractiveSceneCfg):
     # jig that holds the fixture — static, doesn't move (adjust pos later)
     jig = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/Jig",
-        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.2]),
+        init_state=AssetBaseCfg.InitialStateCfg(pos=[0.5, 0.0, 0.4552]),
         spawn=UsdFileCfg(
             usd_path=os.path.join(ASSETS_DIR, "vape_jig.usd"),
             scale=(0.01, 0.01, 0.01),
@@ -154,7 +154,7 @@ class DisassemblySceneCfg(InteractiveSceneCfg):
     # bottom cap — the part the robot pulls out. has physics (mass, collision, no gravity)
     workpiece: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/Workpiece",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=[0.5, 0.054, 0.25]),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=[0.5, 0.054, 0.45]),
         spawn=UsdFileCfg(
             usd_path=os.path.join(ASSETS_DIR, "bottom_cap.usd"),
             scale=(0.0095, 0.01, 0.0095),    # slightly shrunk in X/Z to fit inside fixture
