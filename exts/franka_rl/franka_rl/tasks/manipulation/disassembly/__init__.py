@@ -4,7 +4,7 @@ from . import env_cfg
 
 gym.register(
     id="Franka-Disassembly-v0",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    entry_point=f"{__name__}.env_cfg:DisassemblyEnv",
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": env_cfg.DisassemblyEnvCfg,
@@ -14,7 +14,7 @@ gym.register(
 
 gym.register(
     id="Franka-Disassembly-Play-v0",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    entry_point=f"{__name__}.env_cfg:DisassemblyEnv",
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": env_cfg.DisassemblyEnvCfg_Play,
