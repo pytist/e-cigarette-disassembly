@@ -23,6 +23,7 @@ from isaaclab.managers import (
     TerminationTermCfg,
 )
 from isaaclab.scene import InteractiveSceneCfg
+from isaaclab.sensors import CameraCfg
 from isaaclab.sim import SimulationCfg
 from isaaclab.sim.schemas.schemas_cfg import RigidBodyPropertiesCfg
 from isaaclab.sim.spawners.from_files.from_files_cfg import UsdFileCfg
@@ -42,6 +43,16 @@ SLIDING_FRICTION = 5.0     # N — constant kinetic friction force opposing moti
 SLIDING_DAMPING = 30.0     # N·s/m — viscous damping during sliding
 # Release: cap separates completely beyond this distance
 RELEASE_DISTANCE = 0.08    # m
+
+# --- Front camera (Logitech C920) placement ---
+# Adjust these to match the real gooseneck mount position
+FRONT_CAM_POS = (0.5, -0.6, 0.6)   # in front of the workspace, slightly above table
+FRONT_CAM_ROT = (0.957, 0.290, 0.0, 0.0)  # ~34 deg pitch down, looking at the fixture
+
+# --- Wrist camera (RealSense D405) placement ---
+# Offset from panda_hand frame based on cammount CAD (~13cm along mount arm)
+WRIST_CAM_POS = (0.0, 0.0, 0.13)   # 13cm above the hand frame (along mount)
+WRIST_CAM_ROT = (0.0, 0.0, 0.0, 1.0)  # pointing straight down at the gripper
 
 
 @configclass
@@ -87,6 +98,42 @@ class DisassemblySceneCfg(InteractiveSceneCfg):
         ),
     )
 
+    wrist_camera: CameraCfg = CameraCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/panda_hand/WristCamera",
+        spawn=sim_utils.PinholeCameraCfg(
+            focal_length=2.5,
+            horizontal_aperture=4.5,  # ~87 deg horizontal FOV (D405)
+            clipping_range=(0.07, 0.5),  # D405 range: 7-50cm
+        ),
+        offset=CameraCfg.OffsetCfg(
+            pos=WRIST_CAM_POS,
+            rot=WRIST_CAM_ROT,
+            convention="ros",
+        ),
+        width=84,
+        height=84,
+        update_period=1.0 / 30.0,
+        data_types=["rgb", "depth"],
+    )
+
+    front_camera: CameraCfg = CameraCfg(
+        prim_path="{ENV_REGEX_NS}/FrontCamera",
+        spawn=sim_utils.PinholeCameraCfg(
+            focal_length=3.0,
+            horizontal_aperture=4.3,  # ~71 deg horizontal FOV (C920: 78 deg diagonal)
+            clipping_range=(0.05, 5.0),
+        ),
+        offset=CameraCfg.OffsetCfg(
+            pos=FRONT_CAM_POS,
+            rot=FRONT_CAM_ROT,
+            convention="world",
+        ),
+        width=84,
+        height=84,
+        update_period=1.0 / 30.0,
+        data_types=["rgb"],
+    )
+
     workpiece: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/Workpiece",
         init_state=RigidObjectCfg.InitialStateCfg(pos=[0.5, 0.052, 0.45]),
@@ -124,6 +171,21 @@ class DisassemblyActionsCfg:
 
 
 # --- Custom observation & reward functions ---
+
+def _front_camera_rgb(env: object) -> torch.Tensor:
+    """Front camera RGB image, normalized to [0, 1]. Shape: [N, H, W, 3]."""
+    return env.scene["front_camera"].data.output["rgb"].float() / 255.0
+
+
+def _wrist_camera_rgb(env: object) -> torch.Tensor:
+    """Wrist camera RGB image, normalized to [0, 1]. Shape: [N, H, W, 3]."""
+    return env.scene["wrist_camera"].data.output["rgb"].float() / 255.0
+
+
+def _wrist_camera_depth(env: object) -> torch.Tensor:
+    """Wrist camera depth image in meters. Shape: [N, H, W, 1]."""
+    return env.scene["wrist_camera"].data.output["depth"]
+
 
 def _workpiece_pos(env: object) -> torch.Tensor:
     return env.scene["workpiece"].data.root_pos_w[:, :3]
@@ -177,7 +239,18 @@ class DisassemblyObservationsCfg:
             self.enable_corruption = False
             self.concatenate_terms = True
 
+    @configclass
+    class ImageCfg(ObservationGroupCfg):
+        front_rgb = ObservationTermCfg(func=_front_camera_rgb)
+        wrist_rgb = ObservationTermCfg(func=_wrist_camera_rgb)
+        wrist_depth = ObservationTermCfg(func=_wrist_camera_depth)
+
+        def __post_init__(self):
+            self.enable_corruption = False
+            self.concatenate_terms = False
+
     policy: PolicyCfg = PolicyCfg()
+    image: ImageCfg = ImageCfg()
 
 
 @configclass
