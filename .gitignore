@@ -15,7 +15,7 @@ venv/
 isaaclab/
 
 # Logs & checkpoints
-logs/
+*.mp4
 outputs/
 wandb/
 runs/
