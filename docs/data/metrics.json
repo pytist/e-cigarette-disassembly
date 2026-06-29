@@ -1,0 +1,8 @@
+{
+  "success_rate": 0,
+  "training_iterations": 5000,
+  "vape_models": ["Generic Press-Fit Cap"],
+  "parallel_envs": 1024,
+  "training_runs": 4,
+  "last_updated": "2026-06-29"
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "date": "2026-06-26",
+    "title": "First Training Runs Completed",
+    "content": "Successfully completed initial PPO training runs with the Franka Emika robot in Isaac Lab. The simulation runs 1024 parallel environments with a press-fit extraction task. The agent learns to grasp and extract a cylindrical bottom cap from a fixture held by spring forces.",
+    "tags": ["training", "milestone"],
+    "video": null
+  }
+]
