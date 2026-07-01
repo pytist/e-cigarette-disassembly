@@ -16,6 +16,7 @@ isaaclab/
 
 # Logs & checkpoints
 *.mp4
+!docs/media/*.mp4
 outputs/
 wandb/
 runs/
