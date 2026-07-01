@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0a0a0f"/>
+  <!-- Robot arm base -->
+  <rect x="28" y="52" width="10" height="6" rx="2" fill="#4a4a6a"/>
+  <!-- Lower arm segment -->
+  <rect x="30" y="36" width="6" height="18" rx="3" fill="#6c63ff"/>
+  <!-- Elbow joint -->
+  <circle cx="33" cy="36" r="5" fill="#4a4a6a"/>
+  <!-- Upper arm segment (angled) -->
+  <rect x="22" y="18" width="6" height="20" rx="3" fill="#6c63ff" transform="rotate(-25 25 28)"/>
+  <!-- Shoulder joint -->
+  <circle cx="24" cy="20" r="5" fill="#4a4a6a"/>
+  <!-- Gripper left finger -->
+  <rect x="34" y="24" width="4" height="10" rx="2" fill="#8888cc" transform="rotate(15 36 29)"/>
+  <!-- Gripper right finger -->
+  <rect x="26" y="24" width="4" height="10" rx="2" fill="#8888cc" transform="rotate(-15 28 29)"/>
+  <!-- Vape (cylinder) held by gripper -->
+  <rect x="29" y="8" width="8" height="20" rx="3" fill="#00d4aa"/>
+  <rect x="30" y="8" width="6" height="4" rx="1" fill="#00ffcc"/>
+  <!-- Vape indicator light -->
+  <circle cx="33" cy="26" r="2" fill="#ff6b6b" opacity="0.9"/>
+</svg>
