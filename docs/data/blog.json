@@ -1,9 +1,10 @@
 [
   {
     "date": "2026-06-26",
-    "title": "First Training Runs Completed",
-    "content": "Successfully completed initial PPO training runs with the Franka Emika robot in Isaac Lab. The simulation runs 1024 parallel environments with a press-fit extraction task. The agent learns to grasp and extract a cylindrical bottom cap from a fixture held by spring forces.",
-    "tags": ["training", "milestone"],
-    "video": null
+    "title": "Europe Embodied Hackathon — June 24–26",
+    "content": "During the Europe Embodied Hackathon, we got access to work on the Franka Emika Panda 7-DOF arm. We created a first simulation environment (very simplified so far) to realise the final disassembly of the battery with RL. Setup teleoperation for the arm to grasp the vape. We weren't able to deploy the task from sim to real because of the short amount of time.",
+    "tags": ["hackathon", "milestone", "sim"],
+    "images": ["media/hackathon-1.jpg", "media/hackathon-2.jpg"],
+    "video": "media/policy-simulation.mp4"
   }
 ]
