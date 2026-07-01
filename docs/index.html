@@ -254,7 +254,7 @@ async function loadBlog() {
         ${p.video ? `<div class="video-container">
           ${p.video.includes('youtube') || p.video.includes('youtu.be')
             ? `<iframe src="${p.video}" allowfullscreen></iframe>`
-            : `<video src="${p.video}" controls preload="metadata"></video>`}
+            : `<video controls preload="metadata" style="width:100%;border-radius:8px"><source src="${p.video}" type="video/mp4"></video>`}
         </div>` : ''}
       </div>
     `).join('');
